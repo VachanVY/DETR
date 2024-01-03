@@ -1,6 +1,11 @@
 # DETR
+## Getting an error due to `tf.shape` and `Tensor.shape` 
+[Stackoverflow Link to error](https://stackoverflow.com/questions/77741140/problem-in-my-code-due-to-tf-shape-and-tensor-shape-tf-shape-and-tensor?noredirect=1#comment137055300_77741140)\
+[Kaggle Notebook Link: Make a copy of the notebook to  reproduce this issue](https://www.kaggle.com/code/vachanvy/detr-object-detection)\
+Please help. Thank you!
 
- ## Introduction
+## README file will be edited to include in-depth explanation soon...
+## Introduction
 
   * The approach streamlines the detection pipeline, effectively removing the need for many hand-designed components like a non-maximum suppression procedure or anchor generation that explicitly encode our prior knowledge about the task
   * DETR can be easily generalized to produce panoptic segmentation
