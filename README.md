@@ -1,9 +1,5 @@
 # DETR
-## Getting an error due to `tf.shape` and `Tensor.shape` 
-[Kaggle Notebook Link: Make a copy of the notebook to  reproduce this issue](https://www.kaggle.com/code/vachanvy/detr-object-detection)\
-Please help. Thank you!
 
-## README file will be edited to include in-depth explanation soon...
 ## Introduction
 
   * The approach streamlines the detection pipeline, effectively removing the need for many hand-designed components like a non-maximum suppression procedure or anchor generation that explicitly encode our prior knowledge about the task
@@ -18,7 +14,8 @@ Please help. Thank you!
   * The first difficulty in these tasks is to avoid near-duplicates. Most current detectors use postprocessing such as non-maximal suppression to address this issue, but direct set predictions are postprocessing-free
   * They need global inference schemes that model interactions between all predicted elements to avoid redundancy. For constant-size set prediction, dense fully connected networks are sufficient but costly. A general approach is to use auto-regressive sequence models such as RNNs
   * DETR pipeline
-  ![Alt text](image.png)
+
+    ![Alt text](images/image.png)
 
 ## The DETR model
   1. A set prediction loss that forces unique matching between predicted and ground truth boxes while training
@@ -28,21 +25,20 @@ Please help. Thank you!
   *  DETR infers a fixed-size set of N predictions, in a single pass through the decoder, where N is set to be significantly larger than    the typical number of objects in an image
   * One of the main dificulties of training is to score predicted objects `(class_probs, (x_center, y_center, h, w))` with respect to the ground truth
   * To find a bipartite matching between these two sets we search for a permutation of `N` elements `σ ∈ ς_N` with the lowest cost:
+
     <img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*JTB1xo4g3uSsKhWIwb9XsQ.png">
     
     where `L_match` is the pair wise matching cost between ground truth `y_i` and prediction `y_σ(i)`
 
     `L_match =`
     
-    <img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*04BMyPkqlhqJwBBlVZsZpg.png">
+    ![alt text](images/match_eq.png)
     
     for the prediction with index `σ(i)` we define probability of class `ci` as `^p_σ(i)(ci)` and the predicted box as `^b_σ(i)`
   * The main difference with others is that we find one-to-one matching for direct set prediction without duplicates
   * We apply, Hungarian loss for all pairs matched in the previous step. We define the loss similarly to the losses of common object detectors, i.e. a linear combination of a negative log-likelihood for class prediction and a box loss defined later
 
-    <img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*nsr3jZcD1aEmbfcp7p7JCQ.png">
-
-    where `^σ` is the optimal assignment
+    ![alt text](<images/loss_eq.png>)
 
   * The most commonly-used `L1` loss will have different scales for small and large boxes even if their relative errors are similar. To mitigate this issue we use a linear combination of the `L1` loss and the `generalized IoU loss`.
 
@@ -59,7 +55,7 @@ Please help. Thank you!
    * Then a `1*1 convolution` reduces the channel dimension from `C` to `d` giving `z_0.shape = (H, W, d)`
    * Now we flatten it to get a feature map of shape `(H*W, d)`
   ### Transformer
-  ![Alt text](image-1.png)
+  * ![Alt text](images/image-1.png)
   
   #### Transformer encoder
    * We add fixed positional encoding to the transformer
